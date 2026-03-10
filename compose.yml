@@ -1,0 +1,39 @@
+services:
+  nifi:
+    image: apache/nifi:2.4.0  # 或者 latest，但建议使用固定版本
+    container_name: nifi
+    ports:
+      - "8081:8080"      # 明文 HTTP
+      - "8082:8081"
+      - "8443:8443"      # 可选 HTTPS
+      - "52020:52020"    # Management port
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      SINGLE_USER_CREDENTIALS_PASSWORD: Kinlin@Nifi123!
+      NIFI_WEB_HTTPS_HOST: 0.0.0.0
+      NIFI_WEB_HTTPS_PORT: 8443
+      NIFI_SECURITY_KEYSTORE: /opt/nifi/nifi-current/certs/nifi.keystore.jks
+      NIFI_SECURITY_KEYSTOREPASSWD: changeit
+      NIFI_SECURITY_KEYPASSWD: changeit
+      NIFI_SECURITY_TRUSTSTORE: /opt/nifi/nifi-current/certs/nifi.truststore.jks
+      NIFI_SECURITY_TRUSTSTOREPASSWD: changeit
+      NIFI_WEB_PROXY_HOST: etl.data.kinlim.com
+      NIFI_WEB_PROXY_CONTEXT_PATH: /nifi
+      NIFI_SECURITY_REQUIRE_SNI: false
+    volumes:
+      - ./nifi-data:/opt/nifi/nifi-current/provenance_repository
+      - ./nifi-conf:/opt/nifi/nifi-current/conf
+      - ./nifi-flowfile_repository:/opt/nifi/nifi-current/flowfile_repository
+      - ./nifi-content_repository:/opt/nifi/nifi-current/content_repository 
+      - ./nifi-certs:/opt/nifi/nifi-current/certs
+      - ./nifi-env.sh:/opt/nifi/nifi-current/bin/nifi-env.sh
+      - ./nifi-jars:/opt/nifi/nifi-current/ext-libs
+      - ./nifi-logs:/opt/nifi/nifi-current/logs
+    restart: always
+
+    networks:
+      - shared-net
+
+networks:
+  shared-net:
+    external: true
