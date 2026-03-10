@@ -9,7 +9,7 @@ services:
       - "52020:52020"    # Management port
     environment:
       SINGLE_USER_CREDENTIALS_USERNAME: admin
-      SINGLE_USER_CREDENTIALS_PASSWORD: Kinlin@Nifi123!
+      SINGLE_USER_CREDENTIALS_PASSWORD: Kinlin
       NIFI_WEB_HTTPS_HOST: 0.0.0.0
       NIFI_WEB_HTTPS_PORT: 8443
       NIFI_SECURITY_KEYSTORE: /opt/nifi/nifi-current/certs/nifi.keystore.jks
